@@ -1,22 +1,6 @@
-"lang
-let $LANG='en_US.UTF-8'
-
-"color setting
-syntax on
-colorscheme elflord
-
-"basic setting
-set number
-set cursorline
-set nobackup
-set noswapfile
-set showmatch
-set shiftwidth=4
-
-"search
-set ignorecase
-set incsearch
-set hlsearch
+" source vim file
+source $HOME/.config/nvim/setting.vim
+source $HOME/.config/nvim/plug-config/coc.vim
 
 "tab
 " Anywhere SID.
@@ -76,9 +60,6 @@ let g:netrw_alto = 1
 " split open size
 let g:netrw_winsize = 20
 
-"map <C-n> :NERDTreeToggle<CR>
-"let NERDTreeShowHidden=1
-
 "python3 setting (for deoplete
 let g:python3_host_prog='/usr/local/bin/python3'
 let g:loaded_python_provider=0
@@ -95,129 +76,44 @@ endif
 
 call plug#begin('~/.vim/plugged')
   Plug 'junegunn/vim-plug',{'dir': '~/.vim/plugged/vim-plug/autoload'}
-  "golang 
-  Plug 'prabirshrestha/async.vim'
-  Plug 'prabirshrestha/vim-lsp'
-  Plug 'mattn/vim-lsp-settings'
-  Plug 'mattn/vim-goimports'
-  Plug 'prabirshrestha/asyncomplete.vim'
-  Plug 'prabirshrestha/asyncomplete-lsp.vim'
+  Plug 'google/vim-maktaba'
+  Plug 'google/vim-codefmt'
+  Plug 'google/vim-glaive'
 
-  "snippet
-  if has('nvim')
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  else
-    Plug 'Shougo/deoplete.nvim'
-    Plug 'roxma/nvim-yarp'
-    Plug 'roxma/vim-hug-neovim-rpc'
-  endif
-  let g:deoplete#enable_at_startup = 1
-
-  Plug 'Shougo/neosnippet.vim'
-  Plug 'Shougo/neosnippet-snippets'
-  Plug 'thomasfaingnaert/vim-lsp-snippets'
-  Plug 'thomasfaingnaert/vim-lsp-neosnippet'
+  "java
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  Plug 'nvim-treesitter/nvim-treesitter'
 
   "utility
   Plug 'easymotion/vim-easymotion'
 
-  "filer defx
-  if has('nvim')
-      Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
-  else
-      Plug 'Shougo/defx.nvim'
-      Plug 'roxma/nvim-yarp'
-      Plug 'roxma/vim-hug-neovim-rpc'
-  endif
+  "gh.vim
+  Plug 'skanehira/gh.vim'
+
+  " markdown preview
+  Plug 'skanehira/preview-markdown.vim'
 call plug#end()
 
-"terminal[start]-----
+"Glaive
+call glaive#Install()
+Glaive codefmt google_java_executable=`expand("java -jar $HOME/google-java-format-1.11.0-all-deps.jar")`
+
+"""terminal
 tnoremap <silent> <ESC> <C-\><C-n>
+"""terminal end
 
-"neosnippet
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-imap <C-k>     <Plug>(neosnippet_expand_or_jump)
-smap <C-k>     <Plug>(neosnippet_expand_or_jump)
-xmap <C-k>     <Plug>(neosnippet_expand_target)
+""" treesitter
+lua <<EOF
+require 'nvim-treesitter.configs'.setup {
+  ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+  },
+}
+EOF
+""" treesitter end
 
-" SuperTab like snippets behavior.
-" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
-"imap <expr><TAB>
-" \ pumvisible() ? "\<C-n>" :
-" \ neosnippet#expandable_or_jumpable() ?
-" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
-\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
-
-" For conceal markers.
-if has('conceal')
-  set conceallevel=2 concealcursor=niv
-endif
-"neosnippet[end]-----
-
-"defx
-autocmd FileType defx call s:defx_my_settings()
-    function! s:defx_my_settings() abort
-     " Define mappings
-      nnoremap <silent><buffer><expr> <CR>
-     \ defx#do_action('drop')
-      nnoremap <silent><buffer><expr> c
-     \ defx#do_action('copy')
-      nnoremap <silent><buffer><expr> m
-     \ defx#do_action('move')
-      nnoremap <silent><buffer><expr> p
-     \ defx#do_action('paste')
-      nnoremap <silent><buffer><expr> l
-     \ defx#do_action('open')
-      nnoremap <silent><buffer><expr> E
-     \ defx#do_action('open', 'vsplit')
-      nnoremap <silent><buffer><expr> P
-     \ defx#do_action('preview')
-       nnoremap <silent><buffer><expr> o
-     \ defx#do_action('open_tree', 'toggle')
-      nnoremap <silent><buffer><expr> K
-     \ defx#do_action('new_directory')
-      nnoremap <silent><buffer><expr> N
-     \ defx#do_action('new_file')
-      nnoremap <silent><buffer><expr> d
-     \ defx#do_action('remove')
-      nnoremap <silent><buffer><expr> r
-     \ defx#do_action('rename')
-      nnoremap <silent><buffer><expr> x
-     \ defx#do_action('execute_system')
-      nnoremap <silent><buffer><expr> yy
-     \ defx#do_action('yank_path')
-      nnoremap <silent><buffer><expr> .
-     \ defx#do_action('toggle_ignored_files')
-      nnoremap <silent><buffer><expr> h
-     \ defx#do_action('cd', ['..'])
-      nnoremap <silent><buffer><expr> ~
-     \ defx#do_action('cd')
-      nnoremap <silent><buffer><expr> q
-     \ defx#do_action('quit')
-      nnoremap <silent><buffer><expr> <Space>
-     \ defx#do_action('toggle_select') . 'j'
-      nnoremap <silent><buffer><expr> *
-     \ defx#do_action('toggle_select_all')
-      nnoremap <silent><buffer><expr> j
-     \ line('.') == line('$') ? 'gg' : 'j'
-      nnoremap <silent><buffer><expr> k
-     \ line('.') == 1 ? 'G' : 'k'
-      nnoremap <silent><buffer><expr> <C-l>
-     \ defx#do_action('redraw')
-      nnoremap <silent><buffer><expr> <C-g>
-     \ defx#do_action('print')
-      nnoremap <silent><buffer><expr> cd
-     \ defx#do_action('change_vim_cwd')
-    endfunction
-
-call defx#custom#option('_', {
-      \ 'winwidth': 40,
-      \ 'split': 'vertical',
-      \ 'direction': 'topleft',
-      \ 'show_ignored_files': 1,
-      \ 'buffer_name': 'exlorer',
-      \ 'toggle': 1,
-      \ 'resume': 1,
-      \ })
-" defx Config: end -------------------
+""" markdown[start]
+let g:preview_markdown_vertical = 1
+let g:preview_markdown_parser = 'glow'
+""" markdown[end]
