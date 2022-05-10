@@ -9,3 +9,4 @@ if [[ ! -d $HOME/scripts ]]; then
 fi
 ln -s $PWD/scripts/export.sh $HOME/scripts/export.sh
 ln -s $PWD/scripts/function.sh $HOME/scripts/function.sh
+ln -s $PWD/scripts/alias.sh $HOME/scripts/alias.sh
