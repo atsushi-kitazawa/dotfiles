@@ -22,3 +22,5 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
+# git
+alias gc='git clone'

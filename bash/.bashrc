@@ -102,3 +102,4 @@ fi
 . $HOME/scripts/function.sh
 . $HOME/scripts/export.sh
 . $HOME/scripts/alias.sh
+. $HOME/scripts/credential.sh
