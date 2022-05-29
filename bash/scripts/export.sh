@@ -7,7 +7,8 @@ export JMC_HOME=$HOME/devtool/java/jmc-8.0.1_osx-x64/JDK\ Mission\ Control.app/C
 
 # set GOPATH
 #export GOPATH=$HOME/.go
-export GOPATH=$HOME/go
+#export GOPATH=$HOME/go
+export GOPATH=$HOME/workspace/golang
 
 # set nodebrew
 export NODEBREW_HOME=$HOME/.nodebrew/node/v14.15.1
